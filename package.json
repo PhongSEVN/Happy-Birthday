@@ -13,7 +13,7 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
-  "homepage": "https://phongsevn.github.io/birthday",
+  "homepage": "https://PhongSEVN.github.io/Happy-Birthday/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
