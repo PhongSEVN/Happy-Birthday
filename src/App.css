@@ -1,38 +1,298 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;900&family=Playfair+Display:ital,wght@0,900;1,900&display=swap');
+
+:root {
+  --bg-color: #000;
+  --text-color: #fff;
+  --box-color: #bd00ff; 
+  --ribbon-color: #00f3ff; 
+  --envelope-color: #1e1e2e;
+  --envelope-inner: #ff0099;
 }
 
-.App-logo {
-  height: 40vmin;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-color);
+  background: linear-gradient(45deg, #1a0b2e, #290025, #0a1f26);
+  background-size: 400% 400%;
+  animation: disco-bg 15s ease infinite;
+  color: var(--text-color);
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1200px;
+}
+
+@keyframes disco-bg {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Hyper Starfield */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(white, rgba(255,255,255,.5) 2px, transparent 3px),
+    radial-gradient(white, rgba(255,255,255,.5) 1px, transparent 2px);
+  background-size: 350px 350px, 200px 200px;
+  animation: fly-stars 20s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes fly-stars {
+    from { transform: scale(1); }
+    to { transform: scale(1.5); opacity: 0; }
+}
+
+/* 3D Scene */
+.scene {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+.envelope-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+}
+
+.envelope-body {
+    position: absolute;
+    width: 300px;
+    height: 180px;
+    background: var(--envelope-color);
+    border: 2px solid #00f3ff;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.4);
+    z-index: 10;
+    overflow: hidden;
+}
+
+.envelope-body::before {
+    content: '';
+    position: absolute;
+    width: 0; 
+    height: 0; 
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-bottom: 90px solid #2a2a3e; /* Inner fold */
+    bottom: 0;
+    left: 0;    
+    pointer-events: none;
+    z-index: 20;
+}
+.envelope-body::after {
+    content: '';
+    position: absolute;
+    width: 0; 
+    height: 0; 
+    border-left: 150px solid #1e1e2e;
+    border-right: 150px solid #1e1e2e;
+    border-top: 100px solid transparent; 
+    bottom: 0;
+    left: 0;
+    z-index: 21;
+}
+
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0; 
+    height: 0; 
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 110px solid var(--envelope-color);
+    transform-origin: top;
+    z-index: 30;
+    border-top-color: #3b3b55; /* Slightly lighter */
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));
+}
+
+.wax-seal {
+    position: absolute;
+    top: -80px;
+    left: -20px;
+    width: 40px;
+    height: 40px;
+    background: #ff0099;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #ff0099;
+    text-align: center;
+    line-height: 40px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.letter {
+    position: absolute;
+    width: 260px;
+    height: 240px;
+    background: white;
+    left: 20px;
+    bottom: 0;
+    border-radius: 5px;
+    z-index: 5;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Playfair Display', serif;
+    color: #333;
+    font-weight: bold;
+    font-size: 1.5rem;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    transform: translateY(100px); 
+}
+
+.birthday-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0); 
+  width: 90vw;
+  max-width: 800px;
+  text-align: center;
+  z-index: 100;
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.birthday-card.visible {
+  pointer-events: auto;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 6rem;
+  font-weight: 900;
+  color: #fff;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1;
+  text-shadow: 
+    0 0 10px #ff0099,
+    0 0 20px #ff0099,
+    0 0 40px #ff0099;
+  letter-spacing: -2px;
+}
+
+.subtitle {
+  font-size: 2rem;
+  color: #00f3ff;
+  font-weight: 700;
+  margin-top: 2rem;
+  text-shadow: 0 0 10px #00f3ff;
+  opacity: 0;
+}
+
+.highlight {
+  color: #ffee00;
+  text-shadow: 
+    0 0 10px #ffee00,
+    0 0 30px #ffee00;
+}
+
+.instruction-text {
+  position: absolute;
+  bottom: -80px;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-shadow: 0 0 10px #fff;
+  transform: translateZ(110px);
+  animation: pulse-rapid 0.5s infinite alternate;
+}
+
+.gallery-btn {
+  margin-top: 2rem;
+  padding: 15px 30px;
+  border-radius: 30px;
+  background: white;
+  color: #ff0099;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 20px #ff0099;
+  transition: all 0.2s;
+}
+
+.gallery-btn:hover {
+  transform: scale(1.1);
+  background: #ff0099;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+@keyframes pulse-rapid {
+  from { transform: translateZ(110px) scale(1); opacity: 0.8;}
+  to { transform: translateZ(110px) scale(1.1); opacity: 1;}
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.confetti {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+  z-index: 500; 
+  box-shadow: 0 0 5px currentColor; 
+}
+
+.balloon {
+  position: absolute;
+  width: 60px;
+  height: 70px;
+  border-radius: 50%;
+  pointer-events: auto; 
+  z-index: 1500; 
+  box-shadow: inset -5px -5px 10px rgba(0,0,0,0.3), 0 0 10px currentColor; 
+  cursor: crosshair;
+}
+.balloon::before {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  width: 2px;
+  height: 50px;
+  background: rgba(255,255,255,0.8);
+  transform: translateX(-50%);
+}
+
+.flash-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 9999;
+}
+
+@media (max-width: 768px) {
+  .scene { width: 260px; height: 160px; }
+  .envelope-body { width: 260px; height: 160px; }
+  .envelope-body::before { border-left-width: 130px; border-right-width: 130px; border-bottom-width: 80px; }
+  .envelope-body::after { border-left-width: 130px; border-right-width: 130px; }
+  .envelope-flap { border-left-width: 130px; border-right-width: 130px; border-top-width: 90px; }
+  .letter { width: 230px; height: 210px; }
+  .title { font-size: 3.5rem; }
 }

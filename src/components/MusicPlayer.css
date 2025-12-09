@@ -1,0 +1,64 @@
+.music-player-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.music-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.music-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.music-btn.playing {
+  border-color: #00f3ff;
+  box-shadow: 0 0 20px #00f3ff;
+  animation: spin-slow 4s linear infinite;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.visualizer {
+  display: flex;
+  gap: 3px;
+  height: 30px;
+  align-items: flex-end;
+}
+
+.bar {
+  width: 5px;
+  background: #00f3ff;
+  animation: equalizer 0.5s ease-in-out infinite;
+}
+
+.bar:nth-child(1) { animation-duration: 0.4s; height: 10px; }
+.bar:nth-child(2) { animation-duration: 0.6s; height: 20px; }
+.bar:nth-child(3) { animation-duration: 0.8s; height: 15px; }
+.bar:nth-child(4) { animation-duration: 0.5s; height: 25px; }
+.bar:nth-child(5) { animation-duration: 0.7s; height: 12px; }
+
+@keyframes equalizer {
+  0%, 100% { height: 5px; }
+  50% { height: 100%; }
+}
