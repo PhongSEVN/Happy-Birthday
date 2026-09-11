@@ -1,16 +1,10 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import './Gallery.css';
 
-const IMAGES = [
-  "https://picsum.photos/400/600?random=1",
-  "https://picsum.photos/400/600?random=2",
-  "https://picsum.photos/400/600?random=3",
-  "https://picsum.photos/400/600?random=4",
-  "https://picsum.photos/400/600?random=5",
-  "https://picsum.photos/400/600?random=6",
-  "https://picsum.photos/400/600?random=7",
-  "https://picsum.photos/400/600?random=8",
-];
+// Auto-discovers every image dropped into src/assets/photos — no fixed
+// filenames or count to maintain, add/remove files and the gallery follows.
+const photoContext = require.context('../assets/photos', false, /\.(png|jpe?g|webp|gif)$/i);
+const IMAGES = photoContext.keys().map((key) => photoContext(key));
 
 const Gallery = ({ onClose }) => {
   const containerRef = useRef(null);

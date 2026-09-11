@@ -25,6 +25,7 @@ export const triggerExplosion = (containerRef) => {
       y: 0,
       z: 0,
       backgroundColor: color,
+      color: color,
       left: '50%',
       top: '50%',
       scale: Math.random() * 0.8 + 0.2,
@@ -74,6 +75,7 @@ export const floatBalloons = (containerRef) => {
         
         gsap.set(balloon, {
             backgroundColor: color,
+            color: color,
             x: startX,
             y: startY, 
             z: (Math.random() - 0.5) * 600,
