@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
+import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import './App.css';
 import { GREETING, BIRTHDAY_USER } from './utils/constants';
@@ -11,7 +11,7 @@ function App() {
   const sceneRef = useRef(null);
   const [isOpened, setIsOpened] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
-  const [displayText, setDisplayText] = useState(""); 
+  const [namePct, setNamePct] = useState(0);
 
   // Parallax Effect
   useEffect(() => {
@@ -44,41 +44,10 @@ function App() {
           repeat: -1,
           ease: "sine.inOut"
         });
-        
-        gsap.to(".instruction-text", {
-             scale: 1.1,
-             duration: 0.8,
-             yoyo: true,
-             repeat: -1
-        });
       }
     }, comp);
     return () => ctx.revert();
   }, [isOpened]);
-
-  const scrambleText = (finalText, setFunction) => {
-    const chars = "!<>-_\\/[]{}—=+*^?#________";
-    let iterations = 0;
-    
-    const interval = setInterval(() => {
-      setFunction(finalText
-        .split("")
-        .map((letter, index) => {
-          if(index < iterations) {
-            return finalText[index];
-          }
-          return chars[Math.floor(Math.random() * chars.length)];
-        })
-        .join("")
-      );
-      
-      if(iterations >= finalText.length){ 
-        clearInterval(interval);
-      }
-      
-      iterations += 1/2; 
-    }, 50);
-  };
 
   const handleOpen = () => {
     if (isOpened) return;
@@ -133,14 +102,17 @@ function App() {
             opacity: 1,
             rotation: 0,
             duration: 0.8,
-            ease: "elastic.out(1, 0.3)",
-            onStart: () => {
-                setTimeout(() => {
-                    scrambleText(`${GREETING.TITLE_SUFFIX} ${BIRTHDAY_USER.NAME}`, setDisplayText);
-                }, 200); 
-            }
+            ease: "elastic.out(1, 0.3)"
         }, "-=1.0")
-        
+
+        .to({}, {
+            duration: 1.3,
+            ease: "power1.inOut",
+            onUpdate: function () {
+                setNamePct(this.progress() * 100);
+            }
+        }, "-=0.1")
+
         .to(".subtitle", {
             opacity: 1,
             y: 0,
@@ -164,7 +136,7 @@ function App() {
       
       <div className="scene" onClick={handleOpen} ref={sceneRef}>
         {!isOpened && (
-             <div className="instruction-text" style={{ bottom: '-60px' }}>
+             <div className="instruction-text" style={{ top: '-70px' }}>
                 You have a letter! ✉️
             </div>
         )}
@@ -177,8 +149,10 @@ function App() {
                 </div>
             </div>
             
-            <div className="envelope-body"></div>
-            
+            <div className="envelope-body">
+                <div className="mail-stamp" aria-hidden="true">✈️</div>
+            </div>
+
             <div className="envelope-flap">
                 <div className="wax-seal">P</div>
             </div>
@@ -186,15 +160,22 @@ function App() {
       </div>
 
       <div className={`birthday-card ${isOpened ? 'visible' : ''}`}>
+        <div className="airmail-stamp" aria-hidden="true">🎉</div>
         <h1 className="title">
             {GREETING.TITLE_PREFIX} <br />
-            <span className="highlight">
-                 {displayText || "_"} 
-            </span>
+            {GREETING.TITLE_SUFFIX}
         </h1>
-        <p className="subtitle">{GREETING.SUBTITLE}</p>
-        <p className="subtitle" style={{ fontSize: '2.5rem'}}>✨</p>
-        
+        <p className="name-reveal">
+            <span className="name-box" style={{ clipPath: `inset(0 ${100 - namePct}% 0 0)` }}>
+                <span className="highlight">{BIRTHDAY_USER.NAME}</span>
+            </span>
+            {namePct > 1 && namePct < 99 && (
+                <span className="pen-tip" style={{ left: `${namePct}%` }} aria-hidden="true">✏️</span>
+            )}
+        </p>
+        <p className="subtitle note">{GREETING.SUBTITLE}</p>
+        <p className="subtitle sparkle">✨</p>
+
         {/* Gallery Button */}
         <button 
             className="gallery-btn"
